@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -24,11 +21,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import br.com.jogosecm.seguindoassetas.R
 import kotlinx.coroutines.delay
+
 
 @Composable
 fun TelaJogo(
@@ -43,8 +43,9 @@ fun TelaJogo(
     val appUiState by viewModelAtual.uiState.collectAsState()
 
     val listaDeSeta = listOf(
-        Icons.AutoMirrored.Rounded.ArrowForward,
-        Icons.AutoMirrored.Rounded.ArrowBack
+        R.drawable.direita,
+        R.drawable.esquerda,
+        //Icons.AutoMirrored.Rounded.ArrowBack
     )
     DisposableEffect(Unit) {
         val activity = contexto as? Activity
@@ -63,10 +64,10 @@ fun TelaJogo(
                 repeat(appUiState.rodadas.toInt()) {
                     for (i in appUiState.tempoMax.toInt() downTo 1) {
                         viewModelAtual.updateCountdownValue(i) // Update the UI state with the current countdown value
-                        delay(1000)
+                        delay(350)
                     }
                     viewModelAtual.mudaMostraSeta(true)
-                    delay(3000)
+                    delay(1700)
                     viewModelAtual.mudaMostraSeta(false)
                 }
                 viewModelAtual.updateCountdownValue(0)
@@ -87,7 +88,7 @@ fun TelaJogo(
                     }
                 } else if (appUiState.mostraSeta) {
                     Icon(
-                        listaDeSeta.random(),
+                        painter = painterResource(id = listaDeSeta.random()),
                         null,
                         modifier.size(500.dp)
                     )

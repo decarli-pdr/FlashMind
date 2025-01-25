@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 
 data class JogoUiState(
     val imagem: Paint = Paint(),
-    val tempoMax: String = "3",
+    val tempoMax: String = "5",
     val estadoBotao: Boolean = true,
     val rodadas: String = "10",
     val countdownValue: Int = 0, // Add a field to hold the countdown value
@@ -41,4 +41,3 @@ class AppViewModel : ViewModel() {
     }
 
 }
-

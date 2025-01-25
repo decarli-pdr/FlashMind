@@ -18,11 +18,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -170,7 +168,7 @@ fun TelaInicio(
             ) {
 
 
-                AppLogo(modifier = Modifier.size(130.dp), cor = MaterialTheme.colorScheme.tertiary)
+                AppLogo(modifier = Modifier.size(130.dp), cor = Color.White)
                 Spacer(modifier = Modifier.size(50.dp)) // Push logo to the bottom
                 Button(
                     modifier = modifier,
@@ -195,29 +193,29 @@ fun TelaInicio(
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text("Informações")
-                            Button(
-                                modifier = Modifier.padding(horizontal = 15.dp),
-                                content = {
-                                    Icon(Icons.Rounded.Share, "Compartilhar")
-                                },
-                                enabled = false,
-                                onClick = {
-                                    //                                var textoPodios = "**"
-                                    //                                podios.forEach { categoria ->
-                                    //                                    textoPodios += "\n\n_*${categoria.nomeCategoria}*_"
-                                    //                                    categoria.atletas.forEach {
-                                    //                                        textoPodios += "\n${it.posicao}\t-\t${it.nome}\t-\t${it.tempo}"
-                                    //                                    }
-                                    //                                }
-                                    //                                val sendIntent: Intent = Intent().apply {
-                                    //                                    action = Intent.ACTION_SEND
-                                    //                                    putExtra(Intent.EXTRA_TEXT, textoPodios)
-                                    //                                    type = "text/plain"
-                                    //                                }
-                                    //                                val shareIntent =
-                                    //                                    Intent.createChooser(sendIntent, "Compartilhar Pódios")
-                                    //                                startActivity(contexto, shareIntent, null)
-                                })
+                            /* Button(
+                                 modifier = Modifier.padding(horizontal = 15.dp),
+                                 content = {
+                                     Icon(Icons.Rounded.Share, "Compartilhar")
+                                 },
+                                 enabled = false,
+                                 onClick = {
+                                     //                                var textoPodios = "**"
+                                     //                                podios.forEach { categoria ->
+                                     //                                    textoPodios += "\n\n_*${categoria.nomeCategoria}*_"
+                                     //                                    categoria.atletas.forEach {
+                                     //                                        textoPodios += "\n${it.posicao}\t-\t${it.nome}\t-\t${it.tempo}"
+                                     //                                    }
+                                     //                                }
+                                     //                                val sendIntent: Intent = Intent().apply {
+                                     //                                    action = Intent.ACTION_SEND
+                                     //                                    putExtra(Intent.EXTRA_TEXT, textoPodios)
+                                     //                                    type = "text/plain"
+                                     //                                }
+                                     //                                val shareIntent =
+                                     //                                    Intent.createChooser(sendIntent, "Compartilhar Pódios")
+                                     //                                startActivity(contexto, shareIntent, null)
+                                 }) */
                         }
                         Column(
                             modifier = modifier
