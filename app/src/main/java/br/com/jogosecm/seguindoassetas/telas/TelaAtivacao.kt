@@ -1,5 +1,6 @@
 package br.com.jogosecm.seguindoassetas.telas
 
+import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,9 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,17 +26,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 @Composable
 fun TelaAtivacao(
-
+    contexto: Context
 ) {
 
     val currentDateTime = LocalDateTime.now(ZoneId.systemDefault())
-    val formattedTime = currentDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+    val formattedTime = currentDateTime.format(DateTimeFormatter.ofPattern("HHmm"))
+    val scope = rememberCoroutineScope()
+
 
     var senha by remember { mutableStateOf(value = "") }
 
@@ -61,7 +67,12 @@ fun TelaAtivacao(
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     if (senha == formattedTime) {
-                        println("entrou")
+                        //println("entrou")
+
+                        scope.launch {
+                            ativar(context = contexto)
+                        }
+
                     }
                     //focusManager.clearFocus()
 
@@ -80,5 +91,5 @@ fun TelaAtivacao(
 )
 @Composable
 fun TelaAtivacaoPreview() {
-    TelaAtivacao()
+    TelaAtivacao(LocalContext.current)
 }

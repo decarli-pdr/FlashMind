@@ -1,6 +1,8 @@
 package br.com.jogosecm.seguindoassetas.telas
 
+import android.content.Context
 import androidx.compose.ui.graphics.Paint
+import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,4 +42,10 @@ class AppViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(mostraSeta = value)
     }
 
+}
+
+suspend fun ativar(context: Context) {
+    context.dataStore.edit { settings ->
+        settings[ativado] = true
+    }
 }

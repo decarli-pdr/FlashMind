@@ -45,11 +45,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import br.com.jogosecm.seguindoassetas.R
 import br.com.jogosecm.seguindoassetas.TelaDoApp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
+// At the top level of your kotlin file:
+val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "configuracoes")
+val ativado = booleanPreferencesKey("ativado")
+fun verificaAtivado(contexto: Context): Flow<Boolean> = contexto.dataStore.data
+    .map { configuracoes ->
+        configuracoes[ativado] == true
+    }
 
 @Composable
 fun TelaInicio(
@@ -69,196 +82,210 @@ fun TelaInicio(
         .height(70.dp)
         .width(90.dp)
 
+
     val systemUiController = rememberSystemUiController()
     LaunchedEffect(key1 = Unit) {
         systemUiController.isSystemBarsVisible = false // Hides both status bar and navigation bar
     }
 
     var mostrarInfo by remember { mutableStateOf(false) }
+    val ativacao by verificaAtivado(contexto).collectAsState(false)
 
-    Surface(modifier = modifier.fillMaxSize()) {
-        Row {
-            Column(
-                modifier = modifier
-                    .weight(5f)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = modifier.padding(20.dp)
+    if (ativacao) {
+        Surface(modifier = modifier.fillMaxSize()) {
+            Row {
+                Column(
+                    modifier = modifier
+                        .weight(5f)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    TextField(
-                        value = appUiState.tempoMax,
-                        modifier = modificadorCaixasTxt,
-                        singleLine = true,
-                        onValueChange = {
-                            mudouOTempoMax(it)
-                            if (it.toIntOrNull() != null && it.toIntOrNull()!! > 0) {
-
-                                mudouTextoValido(true)
-                                teclado = ImeAction.Done
-                            } else {
-                                mudouTextoValido(false)
-                                teclado = ImeAction.None
-
-                            }
-                        },
-                        label = {
-                            Text(text = "Tempo", textAlign = TextAlign.Center)
-                        },
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number, imeAction = teclado
-                        ),
-                        keyboardActions = KeyboardActions(onDone = {
-                            teclado = ImeAction.Done
-                            focusManager.clearFocus()
-                        }),
-                        textStyle = TextStyle.Default.copy(
-                            textAlign = TextAlign.Center, fontSize = 40.sp
-                        )
-                    )
-                    TextField(
-                        value = appUiState.rodadas,
-                        modifier = modificadorCaixasTxt,
-                        singleLine = true,
-                        onValueChange = {
-                            mudaramRodadas(it)
-                            if (it.toIntOrNull() != null && it.toIntOrNull()!! > 0) {
-
-                                mudouTextoValido(true)
-                                teclado = ImeAction.Done
-                            } else {
-                                mudouTextoValido(false)
-                                teclado = ImeAction.None
-
-                            }
-                        },
-                        label = {
-                            Text(text = "Rodadas", textAlign = TextAlign.Center)
-                        },
-                        keyboardOptions = KeyboardOptions.Default.copy(
-                            keyboardType = KeyboardType.Number, imeAction = teclado
-                        ),
-                        keyboardActions = KeyboardActions(onDone = {
-                            teclado = ImeAction.Done
-                            focusManager.clearFocus()
-                        }),
-                        textStyle = TextStyle.Default.copy(
-                            textAlign = TextAlign.Center, fontSize = 40.sp
-                        )
-                    )
-                }
-                Button(
-                    modifier = modifier.padding(20.dp),
-                    onClick = { navHostController.navigate("Jogo") },
-                    enabled = appUiState.estadoBotao
-                ) {
-                    Text(
-                        "Iniciar", modifier = modifier.padding(10.dp), fontSize = 30.sp
-                    )
-                }
-            }
-            Column(
-                modifier = Modifier
-                    .weight(5f)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-
-                AppLogo(modifier = Modifier.size(130.dp), cor = Color.White)
-                Spacer(modifier = Modifier.size(50.dp)) // Push logo to the bottom
-                Button(
-                    modifier = modifier,
-                    onClick = { mostrarInfo = true },
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                ) {
-                    Text(
-                        "Informações", modifier = modifier.padding(10.dp), fontSize = 15.sp
-                    )
-                }
-            }
-        }
-
-        if (mostrarInfo) {
-            CaixaDeInformacoes(
-                onDismissRequest = { mostrarInfo = false },
-                content = {
                     Row(
-                        Modifier
-                            .padding(16.dp)
-                            .fillMaxWidth()
+                        modifier = modifier.padding(20.dp)
                     ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text("Informações")
-                            /* Button(
-                                 modifier = Modifier.padding(horizontal = 15.dp),
-                                 content = {
-                                     Icon(Icons.Rounded.Share, "Compartilhar")
-                                 },
-                                 enabled = false,
-                                 onClick = {
-                                     //                                var textoPodios = "**"
-                                     //                                podios.forEach { categoria ->
-                                     //                                    textoPodios += "\n\n_*${categoria.nomeCategoria}*_"
-                                     //                                    categoria.atletas.forEach {
-                                     //                                        textoPodios += "\n${it.posicao}\t-\t${it.nome}\t-\t${it.tempo}"
-                                     //                                    }
-                                     //                                }
-                                     //                                val sendIntent: Intent = Intent().apply {
-                                     //                                    action = Intent.ACTION_SEND
-                                     //                                    putExtra(Intent.EXTRA_TEXT, textoPodios)
-                                     //                                    type = "text/plain"
-                                     //                                }
-                                     //                                val shareIntent =
-                                     //                                    Intent.createChooser(sendIntent, "Compartilhar Pódios")
-                                     //                                startActivity(contexto, shareIntent, null)
-                                 }) */
-                        }
-                        Column(
-                            modifier = modifier
-                                .fillMaxWidth()
-                                //.width(2000.dp)
-                                .verticalScroll(rememberScrollState())
-                            // Adjust height as needed
-                            //.heightIn(max = 300.dp)
+                        TextField(
+                            value = appUiState.tempoMax,
+                            modifier = modificadorCaixasTxt,
+                            singleLine = true,
+                            onValueChange = {
+                                mudouOTempoMax(it)
+                                if (it.toIntOrNull() != null && it.toIntOrNull()!! > 0) {
 
-                        ) {
-                            Text(
-                                "Este jogo é protegido por direitos autorais. Não pode ser modificado, copiado, distribuído ou comercializado sem a autorização expressa do criador. Todos os direitos reservados.\n" +
-                                        "\n" +
-                                        "Criador: Anderson Amaral\n" +
-                                        "Mestre em Saúde e Tecnologia no Espaço Hospitalar – Pós-graduação em Neuropsicologia Reab Cognitva e Pós-graduação em Telessaúde\n"
+                                    mudouTextoValido(true)
+                                    teclado = ImeAction.Done
+                                } else {
+                                    mudouTextoValido(false)
+                                    teclado = ImeAction.None
+
+                                }
+                            },
+                            label = {
+                                Text(text = "Tempo", textAlign = TextAlign.Center)
+                            },
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Number, imeAction = teclado
+                            ),
+                            keyboardActions = KeyboardActions(onDone = {
+                                teclado = ImeAction.Done
+                                focusManager.clearFocus()
+                            }),
+                            textStyle = TextStyle.Default.copy(
+                                textAlign = TextAlign.Center, fontSize = 40.sp
                             )
-                            Text(
-                                "Jogo Seguindo as Setas\n" +
-                                        "\n" +
-                                        "Forma de Jogar\n" +
-                                        "\tO participante deve prestar atenção às direções das setas. A cada contagem regressiva de 3, 2, 1, será projetada uma seta apontando para a esquerda ou para a direita. O participante deve seguir as regras apresentadas antes do jogo, tocando ou pegando um objeto, ou se deslocando na direção da seta. Após isso, uma nova contagem regressiva será exibida, e o participante deverá repetir o procedimento. O jogo continua até seu término\n" +
-                                        "\n" +
-                                        "Objetivos do Jogo\n" +
-                                        "Trabalhar tempo de resposta\n" +
-                                        "Atenção e foco\n" +
-                                        "Controle inibitório\n" +
-                                        "Processamento visual\n" +
-                                        "Coordenação visomotora\n" +
-                                        "Lateralidade\n" +
-                                        "Promoção de Habilidades Sociais e de Interação (se for realizado em grupo)"
+                        )
+                        TextField(
+                            value = appUiState.rodadas,
+                            modifier = modificadorCaixasTxt,
+                            singleLine = true,
+                            onValueChange = {
+                                mudaramRodadas(it)
+                                if (it.toIntOrNull() != null && it.toIntOrNull()!! > 0) {
+
+                                    mudouTextoValido(true)
+                                    teclado = ImeAction.Done
+                                } else {
+                                    mudouTextoValido(false)
+                                    teclado = ImeAction.None
+
+                                }
+                            },
+                            label = {
+                                Text(text = "Rodadas", textAlign = TextAlign.Center)
+                            },
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Number, imeAction = teclado
+                            ),
+                            keyboardActions = KeyboardActions(onDone = {
+                                teclado = ImeAction.Done
+                                focusManager.clearFocus()
+                            }),
+                            textStyle = TextStyle.Default.copy(
+                                textAlign = TextAlign.Center, fontSize = 40.sp
                             )
-                            Image(
-                                painter = painterResource(R.drawable.capa),
-                                contentDescription = "Logomarca dos jogos",
-                                modifier = Modifier.padding(10.dp)
-                            )
-                        }
+                        )
+                    }
+                    Button(
+                        modifier = modifier.padding(20.dp),
+                        onClick = { navHostController.navigate("Jogo") },
+                        enabled = appUiState.estadoBotao
+                    ) {
+                        Text(
+                            "Iniciar", modifier = modifier.padding(10.dp), fontSize = 30.sp
+                        )
                     }
                 }
-            )
+                Column(
+                    modifier = Modifier
+                        .weight(5f)
+                        .fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
 
+
+                    AppLogo(modifier = Modifier.size(130.dp), cor = Color.White)
+                    Spacer(modifier = Modifier.size(50.dp)) // Push logo to the bottom
+                    Button(
+                        modifier = modifier,
+                        onClick = { mostrarInfo = true },
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    ) {
+                        Text(
+                            "Informações", modifier = modifier.padding(10.dp), fontSize = 15.sp
+                        )
+                    }
+                }
+            }
+
+            if (mostrarInfo) {
+                CaixaDeInformacoes(
+                    onDismissRequest = { mostrarInfo = false },
+                    content = {
+                        Row(
+                            Modifier
+                                .padding(16.dp)
+                                .fillMaxWidth()
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(horizontal = 20.dp)
+                            ) {
+                                Text(
+                                    "Informações",
+                                    modifier = modifier.padding(horizontal = 20.dp)
+                                )
+                                /* Button(
+                                     modifier = Modifier.padding(horizontal = 15.dp),
+                                     content = {
+                                         Icon(Icons.Rounded.Share, "Compartilhar")
+                                     },
+                                     enabled = false,
+                                     onClick = {
+                                         //                                var textoPodios = "**"
+                                         //                                podios.forEach { categoria ->
+                                         //                                    textoPodios += "\n\n_*${categoria.nomeCategoria}*_"
+                                         //                                    categoria.atletas.forEach {
+                                         //                                        textoPodios += "\n${it.posicao}\t-\t${it.nome}\t-\t${it.tempo}"
+                                         //                                    }
+                                         //                                }
+                                         //                                val sendIntent: Intent = Intent().apply {
+                                         //                                    action = Intent.ACTION_SEND
+                                         //                                    putExtra(Intent.EXTRA_TEXT, textoPodios)
+                                         //                                    type = "text/plain"
+                                         //                                }
+                                         //                                val shareIntent =
+                                         //                                    Intent.createChooser(sendIntent, "Compartilhar Pódios")
+                                         //                                startActivity(contexto, shareIntent, null)
+                                     }) */
+                            }
+                            Column(
+                                modifier = modifier
+                                    .fillMaxWidth()
+                                    //.width(2000.dp)
+                                    .verticalScroll(rememberScrollState())
+                                // Adjust height as needed
+                                //.heightIn(max = 300.dp)
+
+                            ) {
+                                Text(
+                                    "Este jogo é protegido por direitos autorais. Não pode ser modificado, copiado, distribuído ou comercializado sem a autorização expressa do criador. Todos os direitos reservados.\n" +
+                                            "\n" +
+                                            "Criador: Anderson Amaral\n" +
+                                            "Mestre em Saúde e Tecnologia no Espaço Hospitalar – Pós-graduação em Neuropsicologia Reab Cognitva e Pós-graduação em Telessaúde\n"
+                                )
+                                Text(
+                                    "Jogo Seguindo as Setas\n" +
+                                            "\n" +
+                                            "Forma de Jogar\n" +
+                                            "\tO participante deve prestar atenção às direções das setas. A cada contagem regressiva de 3, 2, 1, será projetada uma seta apontando para a esquerda ou para a direita. O participante deve seguir as regras apresentadas antes do jogo, tocando ou pegando um objeto, ou se deslocando na direção da seta. Após isso, uma nova contagem regressiva será exibida, e o participante deverá repetir o procedimento. O jogo continua até seu término\n" +
+                                            "\n" +
+                                            "Objetivos do Jogo\n" +
+                                            "Trabalhar tempo de resposta\n" +
+                                            "Atenção e foco\n" +
+                                            "Controle inibitório\n" +
+                                            "Processamento visual\n" +
+                                            "Coordenação visomotora\n" +
+                                            "Lateralidade\n" +
+                                            "Promoção de Habilidades Sociais e de Interação (se for realizado em grupo)"
+                                )
+                                Image(
+                                    painter = painterResource(R.drawable.capa),
+                                    contentDescription = "Logomarca dos jogos",
+                                    modifier = Modifier.padding(10.dp)
+                                )
+                            }
+                        }
+                    }
+                )
+
+            }
         }
+    } else {
+        TelaAtivacao(contexto = contexto)
     }
+
+
 }
 
 @Composable
