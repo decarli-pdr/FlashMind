@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +35,26 @@ import br.com.jogosecm.seguindoassetas.R
 import kotlinx.coroutines.delay
 
 
+/**
+ * TelaJogo é uma função Composable.
+ *
+ * Esta função Composable exibe a tela do jogo, incluindo o cronômetro de contagem regressiva,
+ * o indicador de direção da seta e a mensagem de fim de jogo. Ela gerencia o fluxo do jogo,
+ * atualizando a interface do usuário com base no estado do jogo fornecido pelo `AppViewModel`.
+ *
+ * @param modifier O modificador a ser aplicado ao layout.
+ * @param viewModelAtual A instância de `AppViewModel` que contém o estado e a lógica do jogo.
+ * @param navHostController O `NavHostController` para navegação dentro do aplicativo.
+ * @param contexto O `Context` do Android, tipicamente o contexto da Activity.
+ *
+ * Funcionalidades:
+ * - **Mantém a tela ligada:** Impede que a tela desligue durante a jogatina.
+ * - **Exibe a Contagem Regressiva:** Mostra um cronômetro de contagem regressiva baseado em `appUiState.countdownValue`.
+ * - **Exibe a Seta:** Exibe aleatoriamente uma seta da `listaDeSeta` por uma curta duração.
+ * - **Gerencia o Fim de Jogo:** Exibe "Fim de jogo" quando a contagem regressiva atinge 0, com um botão para retornar.
+ * - **Gerencia Rodadas e Tempo de Jogo:** Itera pelas rodadas do jogo e pelo tempo especificado em `appUiState`.
+ * - **Atualiza o Estado do Jogo:** Atualiza o estado do jogo no `AppViewModel`, influenciando a UI.
+ */
 @Composable
 fun TelaJogo(
     modifier: Modifier,
@@ -42,11 +67,14 @@ fun TelaJogo(
 ) {
     val appUiState by viewModelAtual.uiState.collectAsState()
 
-    val listaDeSeta = listOf(
-        R.drawable.direita,
-        R.drawable.esquerda,
+    val listaDeSeta = mapOf(
+        true to R.drawable.direita,
+        false to R.drawable.esquerda,
         //Icons.AutoMirrored.Rounded.ArrowBack
     )
+    var contagemSeta = remember { 1 }
+    var ultimaSeta = remember { true }
+
     DisposableEffect(Unit) {
         val activity = contexto as? Activity
         activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -55,12 +83,20 @@ fun TelaJogo(
             activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         }
     }
+    var preparou by remember { mutableStateOf(false) }
+    var progresso by remember { mutableFloatStateOf(0f) }
 
     Surface(modifier = modifier.fillMaxSize()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
             //val coroutineScope = rememberCoroutineScope()
 
             LaunchedEffect(key1 = appUiState.rodadas, key2 = appUiState.tempoMax) {
+                preparou = false
+                for (contador in 0..500) {
+                    delay(10)
+                    progresso = contador / 500f
+                }
+                preparou = true
                 repeat(appUiState.rodadas.toInt()) {
                     for (i in appUiState.tempoMax.toInt() downTo 1) {
                         viewModelAtual.updateCountdownValue(i) // Update the UI state with the current countdown value
@@ -73,7 +109,18 @@ fun TelaJogo(
                 viewModelAtual.updateCountdownValue(0)
             }
             Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
-                if (appUiState.countdownValue == 0) {
+                if (!preparou) {
+                    Column(
+                        modifier = modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text("Prepare-se", fontSize = 80.sp, modifier = modifier.padding(20.dp))
+                        LinearProgressIndicator(
+                            progress = { progresso }, modifier = modifier
+                        )
+                    }
+                } else if (appUiState.countdownValue == 0) {
                     Column(
                         modifier = modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -87,11 +134,28 @@ fun TelaJogo(
                         }
                     }
                 } else if (appUiState.mostraSeta) {
-                    Icon(
-                        painter = painterResource(id = listaDeSeta.random()),
-                        null,
-                        modifier.size(500.dp)
-                    )
+                    val seta = listaDeSeta.keys.random()
+                    if (seta == ultimaSeta) {
+                        contagemSeta++
+                    } else {
+                        contagemSeta = 1
+                    }
+                    if (contagemSeta == 4) {
+                        Icon(
+                            painter = painterResource(id = listaDeSeta[!seta]!!),
+                            null,
+                            modifier.size(500.dp)
+                        )
+                        ultimaSeta = !seta
+                    } else {
+                        Icon(
+                            painter = painterResource(id = listaDeSeta[seta]!!),
+                            null,
+                            modifier.size(500.dp)
+                        )
+                        ultimaSeta = seta
+                    }
+
                 } else {
 
                     Text(
