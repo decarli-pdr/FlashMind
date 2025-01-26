@@ -54,6 +54,11 @@ fun TelaAtivacao(
                 modifier = Modifier.padding(20.dp),
                 fontSize = 30.sp
             )
+            /*Text(
+                formattedTime,
+                modifier = Modifier.padding(20.dp),
+                fontSize = 30.sp
+            )*/
             TextField(
                 value = senha,
                 modifier = Modifier.padding(20.dp),
