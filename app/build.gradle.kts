@@ -5,14 +5,14 @@ plugins {
 }
 
 android {
-    namespace = "br.com.jogosecm.seguindoassetas"
+    namespace = "br.com.jogosecm.deolhonascores"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "br.com.jogosecm.seguindoassetas"
+        applicationId = "br.com.jogosecm.deolhonascores"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

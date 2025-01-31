@@ -1,4 +1,4 @@
-package br.com.jogosecm.seguindoassetas.telas
+package br.com.jogosecm.deolhonascores.telas
 
 import android.content.Context
 import androidx.compose.ui.graphics.Paint
@@ -12,9 +12,11 @@ data class JogoUiState(
     val imagem: Paint = Paint(),
     val tempoMax: String = "5",
     val estadoBotao: Boolean = true,
+    val palavraColorida: Boolean = false,
     val rodadas: String = "10",
     val countdownValue: Int = 0, // Add a field to hold the countdown value
-    val mostraSeta: Boolean = false // Add a field to hold the countdown value
+    val mostraCor: Boolean = false, // Add a field to hold the countdown value
+    val duracaoCor: String = "2" // Add a field to hold the countdown value
 )
 
 class AppViewModel : ViewModel() {
@@ -38,8 +40,16 @@ class AppViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(countdownValue = value)
     }
 
-    fun mudaMostraSeta(value: Boolean) {
-        _uiState.value = _uiState.value.copy(mostraSeta = value)
+    fun mudaMostraCor(value: Boolean) {
+        _uiState.value = _uiState.value.copy(mostraCor = value)
+    }
+
+    fun mudaSwitchCor(value: Boolean) {
+        _uiState.value = _uiState.value.copy(palavraColorida = value)
+    }
+
+    fun mudaDuracaoCor(value: String) {
+        _uiState.value = _uiState.value.copy(duracaoCor = value)
     }
 
 }

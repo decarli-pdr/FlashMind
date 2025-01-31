@@ -1,8 +1,7 @@
-package br.com.jogosecm.seguindoassetas
-
-import org.junit.Test
+package br.com.jogosecm.deolhonascores
 
 import org.junit.Assert.*
+import org.junit.Test
 
 /**
  * Example local unit test, which will execute on the development machine (host).

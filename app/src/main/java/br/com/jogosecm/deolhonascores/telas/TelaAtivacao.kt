@@ -1,4 +1,4 @@
-package br.com.jogosecm.seguindoassetas.telas
+package br.com.jogosecm.deolhonascores.telas
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement

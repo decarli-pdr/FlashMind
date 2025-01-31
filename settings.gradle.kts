@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Seguindo as Setas"
+rootProject.name = "De Olho nas Cores"
 include(":app")

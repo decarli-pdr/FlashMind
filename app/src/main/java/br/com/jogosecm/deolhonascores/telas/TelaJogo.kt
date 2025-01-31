@@ -1,4 +1,4 @@
-package br.com.jogosecm.seguindoassetas.telas
+package br.com.jogosecm.deolhonascores.telas
 
 import android.app.Activity
 import android.content.Context
@@ -8,9 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,13 +23,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import br.com.jogosecm.seguindoassetas.R
 import kotlinx.coroutines.delay
 
 
@@ -67,13 +67,22 @@ fun TelaJogo(
 ) {
     val appUiState by viewModelAtual.uiState.collectAsState()
 
-    val listaDeSeta = mapOf(
-        true to R.drawable.direita,
-        false to R.drawable.esquerda,
+    val listaDeCores = mapOf(
+        1 to Color(red = 0, green = 252, blue = 4, alpha = 255),
+        2 to Color(red = 255, green = 11, blue = 11, alpha = 255),
+        3 to Color(red = 255, green = 243, blue = 0, alpha = 255),
+        4 to Color(red = 0, green = 163, blue = 255)
         //Icons.AutoMirrored.Rounded.ArrowBack
     )
-    var contagemSeta = remember { 1 }
-    var ultimaSeta = remember { true }
+
+    val listaDeNomes = listOf(
+        "Verde",
+        "Amarelo",
+        "Azul",
+        "Vermelho"
+    )
+    var ultimaCor = remember { 1 }
+    var ultimaPalavra = remember { "Azul" }
 
     DisposableEffect(Unit) {
         val activity = contexto as? Activity
@@ -90,6 +99,8 @@ fun TelaJogo(
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
             //val coroutineScope = rememberCoroutineScope()
 
+
+            //Lógica do negócio
             LaunchedEffect(key1 = appUiState.rodadas, key2 = appUiState.tempoMax) {
                 preparou = false
                 for (contador in 0..500) {
@@ -98,16 +109,17 @@ fun TelaJogo(
                 }
                 preparou = true
                 repeat(appUiState.rodadas.toInt()) {
-                    for (i in appUiState.tempoMax.toInt() downTo 1) {
+                    for (i in appUiState.tempoMax.toInt() downTo 0) {
                         viewModelAtual.updateCountdownValue(i) // Update the UI state with the current countdown value
                         delay(350)
                     }
-                    viewModelAtual.mudaMostraSeta(true)
-                    delay(1700)
-                    viewModelAtual.mudaMostraSeta(false)
+                    viewModelAtual.mudaMostraCor(true)
+                    delay(appUiState.duracaoCor.toLong() * 1000L)
+                    viewModelAtual.mudaMostraCor(false)
                 }
-                viewModelAtual.updateCountdownValue(0)
+                viewModelAtual.updateCountdownValue(-1)
             }
+
             Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
                 if (!preparou) {
                     Column(
@@ -120,7 +132,7 @@ fun TelaJogo(
                             progress = { progresso }, modifier = modifier
                         )
                     }
-                } else if (appUiState.countdownValue == 0) {
+                } else if (appUiState.countdownValue == -1) {
                     Column(
                         modifier = modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -133,35 +145,68 @@ fun TelaJogo(
                             Text("Voltar", fontSize = 35.sp)
                         }
                     }
-                } else if (appUiState.mostraSeta) {
-                    val seta = listaDeSeta.keys.random()
-                    if (seta == ultimaSeta) {
-                        contagemSeta++
-                    } else {
-                        contagemSeta = 1
+                } else if (appUiState.mostraCor) {
+                    //Aqui inicia a parte das setas/cores sorteadas
+                    var cor = listaDeCores.keys.random()
+                    while (cor == ultimaCor) {
+                        cor = listaDeCores.keys.random()
                     }
-                    if (contagemSeta == 4) {
-                        Icon(
-                            painter = painterResource(id = listaDeSeta[!seta]!!),
-                            null,
-                            modifier.size(500.dp)
-                        )
-                        ultimaSeta = !seta
+                    if (!appUiState.palavraColorida) {
+                        Surface(
+                            modifier.fillMaxSize(),
+                            color = listaDeCores[cor]!!
+                        ) {}
                     } else {
-                        Icon(
-                            painter = painterResource(id = listaDeSeta[seta]!!),
-                            null,
-                            modifier.size(500.dp)
-                        )
-                        ultimaSeta = seta
-                    }
+                        Column(
+                            modifier = modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
 
+                            val configuration = LocalConfiguration.current
+                            val screenWidthDp = configuration.screenWidthDp.toFloat()
+
+                            // Calculate a scaling factor based on the screen size
+                            // You can adjust the formula to fit your needs
+                            val scaleFactor =
+                                (screenWidthDp) / 5f // Example formula
+
+                            // Get the density to convert dp to sp
+                            val density = LocalDensity.current
+
+                            var palavraSorteada = listaDeNomes.random()
+                            while (palavraSorteada == ultimaPalavra) {
+                                palavraSorteada = listaDeNomes.random()
+                            }
+
+                            Text(
+                                modifier = modifier,
+                                text = palavraSorteada,
+                                //fontSize = 200.sp,
+                                fontSize = with(density) { (scaleFactor).sp }, // Calculate font size in sp,
+                                color = listaDeCores[cor]!!,
+                                fontWeight = FontWeight.ExtraBold
+                            )
+                            ultimaPalavra = palavraSorteada
+                        }
+
+
+                    }
+                    ultimaCor = cor
                 } else {
+                    if (appUiState.countdownValue == 0) {
+                        Text(
+                            "VAI!",
+                            fontSize = 300.sp
+                        )
+                    } else {
+                        Text(
+                            appUiState.countdownValue.toString(),
+                            fontSize = 300.sp
+                        ) // Display the countdown value
+                    }
 
-                    Text(
-                        appUiState.countdownValue.toString(),
-                        fontSize = 300.sp
-                    ) // Display the countdown value
+
                 }
             })
         })

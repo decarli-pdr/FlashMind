@@ -1,4 +1,4 @@
-package br.com.jogosecm.seguindoassetas.telas
+package br.com.jogosecm.deolhonascores.telas
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -22,6 +23,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -50,8 +52,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
-import br.com.jogosecm.seguindoassetas.R
-import br.com.jogosecm.seguindoassetas.TelaDoApp
+import br.com.jogosecm.deolhonascores.R
+import br.com.jogosecm.deolhonascores.TelaDoApp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -78,9 +80,9 @@ fun TelaInicio(
     var teclado = ImeAction.Done
     val focusManager = LocalFocusManager.current
     val modificadorCaixasTxt = modifier
-        .padding(10.dp)
+        .padding(5.dp)
         .height(70.dp)
-        .width(90.dp)
+        .width(110.dp)
 
 
     val systemUiController = rememberSystemUiController()
@@ -110,7 +112,7 @@ fun TelaInicio(
                             singleLine = true,
                             onValueChange = {
                                 mudouOTempoMax(it)
-                                if (it.toIntOrNull() != null && it.toIntOrNull()!! > 0) {
+                                if (it.toIntOrNull() != null && it.toIntOrNull()!! >= 0) {
 
                                     mudouTextoValido(true)
                                     teclado = ImeAction.Done
@@ -121,7 +123,7 @@ fun TelaInicio(
                                 }
                             },
                             label = {
-                                Text(text = "Tempo", textAlign = TextAlign.Center)
+                                Text(text = "Contagem", textAlign = TextAlign.Center)
                             },
                             keyboardOptions = KeyboardOptions.Default.copy(
                                 keyboardType = KeyboardType.Number, imeAction = teclado
@@ -164,6 +166,56 @@ fun TelaInicio(
                                 textAlign = TextAlign.Center, fontSize = 40.sp
                             )
                         )
+                        TextField(
+                            value = appUiState.duracaoCor,
+                            modifier = modificadorCaixasTxt,
+                            singleLine = true,
+                            onValueChange = {
+                                viewModelAtual.mudaDuracaoCor(it)
+                                if (it.toIntOrNull() != null && it.toIntOrNull()!! > 0) {
+
+                                    mudouTextoValido(true)
+                                    teclado = ImeAction.Done
+                                } else {
+                                    mudouTextoValido(false)
+                                    teclado = ImeAction.None
+
+                                }
+                            },
+                            label = {
+                                Text(text = "Duração", textAlign = TextAlign.Center)
+                            },
+                            suffix = {
+                                Box(
+                                    modifier = Modifier.height(35.dp),
+                                    contentAlignment = Alignment.BottomEnd
+                                ) {
+                                    Text(text = "s")
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                keyboardType = KeyboardType.Number, imeAction = teclado
+                            ),
+                            keyboardActions = KeyboardActions(onDone = {
+                                teclado = ImeAction.Done
+                                focusManager.clearFocus()
+                            }),
+                            textStyle = TextStyle.Default.copy(
+                                textAlign = TextAlign.Center, fontSize = 40.sp
+                            )
+                        )
+                    }
+                    Row(
+                        modifier = modifier.padding(10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Switch(
+                            checked = appUiState.palavraColorida,
+                            onCheckedChange = { viewModelAtual.mudaSwitchCor(it) },
+                            modifier = modifier
+                        )
+                        Spacer(modifier = modifier.size(10.dp))
+                        Text(text = "Palavras coloridas")
                     }
                     Button(
                         modifier = modifier.padding(20.dp),
@@ -258,7 +310,7 @@ fun TelaInicio(
                                     "Jogo Seguindo as Setas\n" +
                                             "\n" +
                                             "Forma de Jogar\n" +
-                                            "\tO participante deve prestar atenção às direções das setas. A cada contagem regressiva de 3, 2, 1, será projetada uma seta apontando para a esquerda ou para a direita. O participante deve seguir as regras apresentadas antes do jogo, tocando ou pegando um objeto, ou se deslocando na direção da seta. Após isso, uma nova contagem regressiva será exibida, e o participante deverá repetir o procedimento. O jogo continua até seu término\n" +
+                                            "\tO participante deve prestar atenção às cores na tela. A cada contagem regressiva de 3, 2, 1 (configurável) será projetada uma cor. O participante deve seguir as regras apresentadas antes do jogo, tocando ou pegando um objeto, ou se deslocando na direção da seta. Após isso, uma nova contagem regressiva será exibida, e o participante deverá repetir o procedimento. O jogo continua até seu término\n" +
                                             "\n" +
                                             "Objetivos do Jogo\n" +
                                             "Trabalhar tempo de resposta\n" +
@@ -304,7 +356,7 @@ fun CaixaDeInformacoes(
                 .padding(16.dp)
                 .background(
                     color = MaterialTheme.colorScheme.background,
-                    shape = androidx.compose.foundation.shape.RoundedCornerShape(15.dp)
+                    shape = RoundedCornerShape(15.dp)
                 )
         ) {
             content()

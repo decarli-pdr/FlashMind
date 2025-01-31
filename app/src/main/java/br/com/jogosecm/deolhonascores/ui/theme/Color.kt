@@ -1,4 +1,4 @@
-package br.com.jogosecm.seguindoassetas.ui.theme
+package br.com.jogosecm.deolhonascores.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package br.com.jogosecm.seguindoassetas
+package br.com.jogosecm.deolhonascores
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,10 +12,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.jogosecm.seguindoassetas.telas.AppViewModel
-import br.com.jogosecm.seguindoassetas.telas.TelaInicio
-import br.com.jogosecm.seguindoassetas.telas.TelaJogo
-import br.com.jogosecm.seguindoassetas.ui.theme.SeguindoAsSetasTheme
+import br.com.jogosecm.deolhonascores.telas.AppViewModel
+import br.com.jogosecm.deolhonascores.telas.TelaInicio
+import br.com.jogosecm.deolhonascores.telas.TelaJogo
+import br.com.jogosecm.deolhonascores.ui.theme.SeguindoAsSetasTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
