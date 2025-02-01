@@ -1,4 +1,4 @@
-package br.com.jogosecm.deolhonascores
+package br.com.jogosecm.neuralreflex
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

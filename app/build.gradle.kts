@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "br.com.jogosecm.deolhonascores"
+    namespace = "br.com.jogosecm.neuralreflex"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "br.com.jogosecm.deolhonascores"
+        applicationId = "br.com.jogosecm.neuralreflex"
         minSdk = 26
         targetSdk = 35
         versionCode = 3

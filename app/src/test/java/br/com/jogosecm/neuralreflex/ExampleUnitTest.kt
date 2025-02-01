@@ -1,4 +1,4 @@
-package br.com.jogosecm.deolhonascores
+package br.com.jogosecm.neuralreflex
 
 import org.junit.Assert.*
 import org.junit.Test

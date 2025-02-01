@@ -1,4 +1,4 @@
-package br.com.jogosecm.deolhonascores.telas
+package br.com.jogosecm.neuralreflex.telas
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -52,8 +52,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
-import br.com.jogosecm.deolhonascores.R
-import br.com.jogosecm.deolhonascores.TelaDoApp
+import br.com.jogosecm.neuralreflex.R
+import br.com.jogosecm.neuralreflex.TelaDoApp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

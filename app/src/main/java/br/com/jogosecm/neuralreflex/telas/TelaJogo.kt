@@ -1,4 +1,4 @@
-package br.com.jogosecm.deolhonascores.telas
+package br.com.jogosecm.neuralreflex.telas
 
 import android.app.Activity
 import android.content.Context
