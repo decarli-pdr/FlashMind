@@ -83,8 +83,13 @@ fun TelaInicio(
     val modificadorCaixasTxt = modifier
         .padding(5.dp)
         .height(70.dp)
-        .width(100.dp)
+        .width(110.dp)
 
+    val textStyleCaixas = TextStyle.Default.copy(
+        textAlign = TextAlign.Center,
+        fontSize = 35.sp,
+        fontWeight = androidx.compose.ui.text.font.FontWeight.Normal
+    )
 
     val systemUiController = rememberSystemUiController()
     LaunchedEffect(key1 = Unit) {
@@ -133,9 +138,7 @@ fun TelaInicio(
                                 teclado = ImeAction.Done
                                 focusManager.clearFocus()
                             }),
-                            textStyle = TextStyle.Default.copy(
-                                textAlign = TextAlign.Center, fontSize = 40.sp
-                            )
+                            textStyle = textStyleCaixas
                         )
                         TextField(
                             value = appUiState.rodadas,
@@ -163,9 +166,7 @@ fun TelaInicio(
                                 teclado = ImeAction.Done
                                 focusManager.clearFocus()
                             }),
-                            textStyle = TextStyle.Default.copy(
-                                textAlign = TextAlign.Center, fontSize = 40.sp
-                            )
+                            textStyle = textStyleCaixas
                         )
                         TextField(
                             value = appUiState.duracaoImagem,
@@ -201,9 +202,7 @@ fun TelaInicio(
                                 teclado = ImeAction.Done
                                 focusManager.clearFocus()
                             }),
-                            textStyle = TextStyle.Default.copy(
-                                textAlign = TextAlign.Center, fontSize = 40.sp
-                            )
+                            textStyle = textStyleCaixas
                         )
                     }
                     Column {
