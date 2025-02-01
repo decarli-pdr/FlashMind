@@ -82,7 +82,7 @@ fun TelaInicio(
     val modificadorCaixasTxt = modifier
         .padding(5.dp)
         .height(70.dp)
-        .width(110.dp)
+        .width(100.dp)
 
 
     val systemUiController = rememberSystemUiController()
@@ -307,19 +307,22 @@ fun TelaInicio(
                                             "Mestre em Saúde e Tecnologia no Espaço Hospitalar – Pós-graduação em Neuropsicologia Reab Cognitva e Pós-graduação em Telessaúde\n"
                                 )
                                 Text(
-                                    "Jogo Seguindo as Setas\n" +
+                                    "\uD83C\uDFA8 Jogo \"Desafio das Cores\" \uD83C\uDFAE\n" +
                                             "\n" +
-                                            "Forma de Jogar\n" +
-                                            "\tO participante deve prestar atenção às cores na tela. A cada contagem regressiva de 3, 2, 1 (configurável) será projetada uma cor. O participante deve seguir as regras apresentadas antes do jogo, tocando ou pegando um objeto, ou se deslocando na direção da seta. Após isso, uma nova contagem regressiva será exibida, e o participante deverá repetir o procedimento. O jogo continua até seu término\n" +
+                                            "Como Jogar\n" +
+                                            "Fique atento às cores na tela! A cada contagem regressiva (de 5 a 1, configurável), o comando \"VAI\" será exibido, seguido por uma cor. O desafio é seguir as regras definidas antes do jogo:\n" +
+                                            "\n" +
+                                            "✅ Tocar ou pegar o objeto correspondente\n" +
+                                            "✅ Deslocar-se na direção da cor projetada\n" +
+                                            "\n" +
+                                            "Após cada ação, um novo estímulo será apresentado, e o jogador deve repetir o processo até o fim do jogo.\n" +
                                             "\n" +
                                             "Objetivos do Jogo\n" +
-                                            "Trabalhar tempo de resposta\n" +
-                                            "Atenção e foco\n" +
-                                            "Controle inibitório\n" +
-                                            "Processamento visual\n" +
-                                            "Coordenação visomotora\n" +
-                                            "Lateralidade\n" +
-                                            "Promoção de Habilidades Sociais e de Interação (se for realizado em grupo)"
+                                            "\uD83E\uDDE0 Melhorar a atenção e o controle inibitório\n" +
+                                            "⚡\uFE0F Desenvolver agilidade e tempo de resposta\n" +
+                                            "\uD83D\uDD04 Estimular a flexibilidade cognitiva\n" +
+                                            "\n" +
+                                            "Prepare-se para um desafio envolvente e dinâmico! \uD83D\uDE80"
                                 )
                                 Image(
                                     painter = painterResource(R.drawable.capa),

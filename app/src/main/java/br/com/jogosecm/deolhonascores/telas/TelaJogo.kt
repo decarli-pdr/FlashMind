@@ -24,9 +24,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -183,9 +185,15 @@ fun TelaJogo(
                                 modifier = modifier,
                                 text = palavraSorteada,
                                 //fontSize = 200.sp,
-                                fontSize = with(density) { (scaleFactor).sp }, // Calculate font size in sp,
-                                color = listaDeCores[cor]!!,
-                                fontWeight = FontWeight.ExtraBold
+                                style = TextStyle(
+                                    fontSize = with(density) { (scaleFactor).sp }, // Calculate font size in sp,
+                                    color = listaDeCores[cor]!!,
+                                    fontWeight = FontWeight.ExtraBold,
+                                    shadow = Shadow(
+                                        color = Color.Black,
+                                        blurRadius = 15f
+                                    )
+                                )
                             )
                             ultimaPalavra = palavraSorteada
                         }
