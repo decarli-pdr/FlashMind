@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "De Olho nas Cores"
+rootProject.name = "Neural Reflex"
 include(":app")
