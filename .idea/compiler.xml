@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="De_Olho_nas_Cores.app" target="21" />
       <module name="Seguindo_as_Setas.app" target="21" />
     </bytecodeTargetLevel>
   </component>

@@ -12,7 +12,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.jogosecm.neuralreflex.telas.AppViewModel
 import br.com.jogosecm.neuralreflex.telas.TelaInicio
 import br.com.jogosecm.neuralreflex.telas.TelaJogo
 import br.com.jogosecm.neuralreflex.ui.theme.SeguindoAsSetasTheme

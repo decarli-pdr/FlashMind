@@ -3,6 +3,7 @@ package br.com.jogosecm.neuralreflex.telas
 import android.app.Activity
 import android.content.Context
 import android.view.WindowManager
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,17 +24,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import br.com.jogosecm.neuralreflex.AppViewModel
+import br.com.jogosecm.neuralreflex.R
 import kotlinx.coroutines.delay
 
 
@@ -69,22 +67,38 @@ fun TelaJogo(
 ) {
     val appUiState by viewModelAtual.uiState.collectAsState()
 
-    val listaDeCores = mapOf(
-        1 to Color(red = 0, green = 252, blue = 4, alpha = 255),
-        2 to Color(red = 255, green = 11, blue = 11, alpha = 255),
-        3 to Color(red = 255, green = 243, blue = 0, alpha = 255),
-        4 to Color(red = 0, green = 163, blue = 255)
-        //Icons.AutoMirrored.Rounded.ArrowBack
-    )
+    val setDeMaos = remember(appUiState.maoDireitaAtivada, appUiState.maoEsquerdaAtivada) {
+        mutableSetOf<Int>().apply {
+            if (appUiState.maoDireitaAtivada) {
+                addAll(
+                    setOf(
+                        R.drawable._d,
+                        R.drawable.d,
+                        R.drawable.dd,
+                        R.drawable.ddd,
+                        R.drawable.dddd,
+                        R.drawable.ddddd
+                    )
+                )
+            }
+            if (appUiState.maoEsquerdaAtivada) {
+                addAll(
+                    setOf(
+                        R.drawable._e,
+                        R.drawable.e,
+                        R.drawable.ee,
+                        R.drawable.eee,
+                        R.drawable.eeee,
+                        R.drawable.eeeee,
+                    )
+                )
+            }
+        }
+    }
 
-    val listaDeNomes = listOf(
-        "Verde",
-        "Amarelo",
-        "Azul",
-        "Vermelho"
-    )
-    var ultimaCor = remember { 1 }
-    var ultimaPalavra = remember { "Azul" }
+
+    var ultimaImagem = remember { R.drawable._d }
+    var mao by remember { mutableStateOf(R.drawable._d) }
 
     DisposableEffect(Unit) {
         val activity = contexto as? Activity
@@ -99,7 +113,6 @@ fun TelaJogo(
 
     Surface(modifier = modifier.fillMaxSize()) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
-            //val coroutineScope = rememberCoroutineScope()
 
 
             //Lógica do negócio
@@ -115,15 +128,19 @@ fun TelaJogo(
                         viewModelAtual.updateCountdownValue(i) // Update the UI state with the current countdown value
                         delay(350)
                     }
-                    viewModelAtual.mudaMostraCor(true)
-                    delay(appUiState.duracaoCor.toLong() * 1000L)
-                    viewModelAtual.mudaMostraCor(false)
+                    do {
+                        mao = setDeMaos.random()
+                    } while (mao == ultimaImagem)
+                    ultimaImagem = mao
+                    viewModelAtual.mudaMostraImagem(true)
+                    delay(appUiState.duracaoImagem.toLong() * 1000L)
+                    viewModelAtual.mudaMostraImagem(false)
                 }
                 viewModelAtual.updateCountdownValue(-1)
             }
 
             Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center, content = {
-                if (!preparou) {
+                if (!preparou) { //Se não tiver preparado, mostra o prepare-se
                     Column(
                         modifier = modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -134,7 +151,7 @@ fun TelaJogo(
                             progress = { progresso }, modifier = modifier
                         )
                     }
-                } else if (appUiState.countdownValue == -1) {
+                } else if (appUiState.countdownValue == -1) { //Se o contador mostrar -1, fim de jogo
                     Column(
                         modifier = modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -147,61 +164,22 @@ fun TelaJogo(
                             Text("Voltar", fontSize = 35.sp)
                         }
                     }
-                } else if (appUiState.mostraCor) {
+                } else if (appUiState.mostraImagem) { //Se mostrar imagem, mostra a imagem
                     //Aqui inicia a parte das setas/cores sorteadas
-                    var cor = listaDeCores.keys.random()
-                    while (cor == ultimaCor) {
-                        cor = listaDeCores.keys.random()
-                    }
-                    if (!appUiState.palavraColorida) {
-                        Surface(
-                            modifier.fillMaxSize(),
-                            color = listaDeCores[cor]!!
-                        ) {}
-                    } else {
-                        Column(
+                      Column(
                             modifier = modifier.fillMaxSize(),
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
 
-                            val configuration = LocalConfiguration.current
-                            val screenWidthDp = configuration.screenWidthDp.toFloat()
+                          Image(
+                              painter = painterResource(mao),
+                              contentDescription = "mão",
+                              modifier = modifier.fillMaxSize(0.9F))
 
-                            // Calculate a scaling factor based on the screen size
-                            // You can adjust the formula to fit your needs
-                            val scaleFactor =
-                                (screenWidthDp) / 5f // Example formula
-
-                            // Get the density to convert dp to sp
-                            val density = LocalDensity.current
-
-                            var palavraSorteada = listaDeNomes.random()
-                            while (palavraSorteada == ultimaPalavra) {
-                                palavraSorteada = listaDeNomes.random()
-                            }
-
-                            Text(
-                                modifier = modifier,
-                                text = palavraSorteada,
-                                //fontSize = 200.sp,
-                                style = TextStyle(
-                                    fontSize = with(density) { (scaleFactor).sp }, // Calculate font size in sp,
-                                    color = listaDeCores[cor]!!,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    shadow = Shadow(
-                                        color = Color.Black,
-                                        blurRadius = 15f
-                                    )
-                                )
-                            )
-                            ultimaPalavra = palavraSorteada
-                        }
-
-
-                    }
-                    ultimaCor = cor
-                } else {
+                      }
+                    ultimaImagem = mao
+                } else { //Se não mostrar imagem, mostra o cronômetro
                     if (appUiState.countdownValue == 0) {
                         Text(
                             "VAI!",

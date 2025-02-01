@@ -1,9 +1,11 @@
-package br.com.jogosecm.neuralreflex.telas
+package br.com.jogosecm.neuralreflex
 
 import android.content.Context
 import androidx.compose.ui.graphics.Paint
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
+import br.com.jogosecm.neuralreflex.telas.ativado
+import br.com.jogosecm.neuralreflex.telas.dataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,11 +14,12 @@ data class JogoUiState(
     val imagem: Paint = Paint(),
     val tempoMax: String = "5",
     val estadoBotao: Boolean = true,
-    val palavraColorida: Boolean = false,
+    val maoDireitaAtivada: Boolean = true,
+    val maoEsquerdaAtivada: Boolean = true,
     val rodadas: String = "10",
     val countdownValue: Int = 0, // Add a field to hold the countdown value
-    val mostraCor: Boolean = false, // Add a field to hold the countdown value
-    val duracaoCor: String = "2" // Add a field to hold the countdown value
+    val mostraImagem: Boolean = false, // Add a field to hold the countdown value
+    val duracaoImagem: String = "4" // Add a field to hold the countdown value
 )
 
 class AppViewModel : ViewModel() {
@@ -40,16 +43,20 @@ class AppViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(countdownValue = value)
     }
 
-    fun mudaMostraCor(value: Boolean) {
-        _uiState.value = _uiState.value.copy(mostraCor = value)
+    fun mudaMostraImagem(value: Boolean) {
+        _uiState.value = _uiState.value.copy(mostraImagem = value)
     }
 
-    fun mudaSwitchCor(value: Boolean) {
-        _uiState.value = _uiState.value.copy(palavraColorida = value)
+    fun mudaMaoEsquerda(value: Boolean) {
+        _uiState.value = _uiState.value.copy(maoEsquerdaAtivada = value)
+    }
+
+    fun mudaMaoDireita(value: Boolean) {
+        _uiState.value = _uiState.value.copy(maoDireitaAtivada = value)
     }
 
     fun mudaDuracaoCor(value: String) {
-        _uiState.value = _uiState.value.copy(duracaoCor = value)
+        _uiState.value = _uiState.value.copy(duracaoImagem = value)
     }
 
 }
