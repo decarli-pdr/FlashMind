@@ -1,4 +1,4 @@
-package br.com.jogosecm.neuralreflex.telas
+package br.com.jogosecm.flashmind.telas
 
 import android.app.Activity
 import android.content.Context
@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import br.com.jogosecm.neuralreflex.AppViewModel
-import br.com.jogosecm.neuralreflex.R
+import br.com.jogosecm.flashmind.AppViewModel
+import br.com.jogosecm.flashmind.R
 import kotlinx.coroutines.delay
 
 

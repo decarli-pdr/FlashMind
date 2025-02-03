@@ -1,4 +1,4 @@
-package br.com.jogosecm.neuralreflex
+package br.com.jogosecm.flashmind
 
 import org.junit.Assert.*
 import org.junit.Test

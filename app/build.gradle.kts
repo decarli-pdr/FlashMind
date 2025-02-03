@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-    namespace = "br.com.jogosecm.neuralreflex"
+    namespace = "br.com.jogosecm.flashmind"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "br.com.jogosecm.neuralreflex"
-        minSdk = 26
+        applicationId = "br.com.jogosecm.flashmind"
+        minSdk = 22
         targetSdk = 35
-        versionCode = 2
-        versionName = "1.0"
+        versionCode = 1
+        versionName = "0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

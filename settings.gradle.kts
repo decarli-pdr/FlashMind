@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Neural Reflex"
+rootProject.name = "Flash Mind"
 include(":app")

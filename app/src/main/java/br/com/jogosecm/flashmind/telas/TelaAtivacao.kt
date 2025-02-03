@@ -1,4 +1,4 @@
-package br.com.jogosecm.neuralreflex.telas
+package br.com.jogosecm.flashmind.telas
 
 import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import br.com.jogosecm.neuralreflex.ativar
+import br.com.jogosecm.flashmind.ativar
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.ZoneId

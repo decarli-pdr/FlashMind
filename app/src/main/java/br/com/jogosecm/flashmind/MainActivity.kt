@@ -1,4 +1,4 @@
-package br.com.jogosecm.neuralreflex
+package br.com.jogosecm.flashmind
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,9 +12,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import br.com.jogosecm.neuralreflex.telas.TelaInicio
-import br.com.jogosecm.neuralreflex.telas.TelaJogo
-import br.com.jogosecm.neuralreflex.ui.theme.SeguindoAsSetasTheme
+import br.com.jogosecm.flashmind.telas.TelaInicio
+import br.com.jogosecm.flashmind.telas.TelaJogo
+import br.com.jogosecm.flashmind.ui.theme.SeguindoAsSetasTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

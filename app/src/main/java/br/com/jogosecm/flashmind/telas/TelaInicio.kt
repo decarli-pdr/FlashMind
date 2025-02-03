@@ -1,4 +1,4 @@
-package br.com.jogosecm.neuralreflex.telas
+package br.com.jogosecm.flashmind.telas
 
 import android.content.Context
 import androidx.compose.foundation.Image
@@ -52,9 +52,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
-import br.com.jogosecm.neuralreflex.AppViewModel
-import br.com.jogosecm.neuralreflex.R
-import br.com.jogosecm.neuralreflex.TelaDoApp
+import br.com.jogosecm.flashmind.AppViewModel
+import br.com.jogosecm.flashmind.R
+import br.com.jogosecm.flashmind.TelaDoApp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

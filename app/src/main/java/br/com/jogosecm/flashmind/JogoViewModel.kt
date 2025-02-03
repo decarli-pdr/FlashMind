@@ -1,11 +1,11 @@
-package br.com.jogosecm.neuralreflex
+package br.com.jogosecm.flashmind
 
 import android.content.Context
 import androidx.compose.ui.graphics.Paint
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
-import br.com.jogosecm.neuralreflex.telas.ativado
-import br.com.jogosecm.neuralreflex.telas.dataStore
+import br.com.jogosecm.flashmind.telas.ativado
+import br.com.jogosecm.flashmind.telas.dataStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
