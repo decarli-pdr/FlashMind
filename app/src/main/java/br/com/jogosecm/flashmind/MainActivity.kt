@@ -14,14 +14,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import br.com.jogosecm.flashmind.telas.TelaInicio
 import br.com.jogosecm.flashmind.telas.TelaJogo
-import br.com.jogosecm.flashmind.ui.theme.SeguindoAsSetasTheme
+import br.com.jogosecm.flashmind.ui.theme.FlashMindTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SeguindoAsSetasTheme {
+            FlashMindTheme {
                 TelaDoApp(modifier = Modifier)
 
             }
@@ -74,7 +74,7 @@ fun ComposeNavigation(modifier: Modifier, model: AppViewModel) {
     )
 @Composable
 fun GreetingPreview() {
-    SeguindoAsSetasTheme {
+    FlashMindTheme {
         TelaDoApp(modifier = Modifier)
     }
 }

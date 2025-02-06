@@ -14,8 +14,9 @@ data class JogoUiState(
     val imagem: Paint = Paint(),
     val tempoMax: String = "5",
     val estadoBotao: Boolean = true,
-    val maoDireitaAtivada: Boolean = true,
-    val maoEsquerdaAtivada: Boolean = true,
+    val letraAtivada: Boolean = true,
+    val coresAtivada: Boolean = true,
+    val numerosAtivados: Boolean = true,
     val rodadas: String = "10",
     val countdownValue: Int = 0, // Add a field to hold the countdown value
     val mostraImagem: Boolean = false, // Add a field to hold the countdown value
@@ -47,12 +48,16 @@ class AppViewModel : ViewModel() {
         _uiState.value = _uiState.value.copy(mostraImagem = value)
     }
 
-    fun mudaMaoEsquerda(value: Boolean) {
-        _uiState.value = _uiState.value.copy(maoEsquerdaAtivada = value)
+    fun mudaCorAtivada(value: Boolean) {
+        _uiState.value = _uiState.value.copy(coresAtivada = value)
     }
 
-    fun mudaMaoDireita(value: Boolean) {
-        _uiState.value = _uiState.value.copy(maoDireitaAtivada = value)
+    fun mudaLetraAtivada(value: Boolean) {
+        _uiState.value = _uiState.value.copy(letraAtivada = value)
+    }
+
+    fun mudaNumeroAtivado(value: Boolean) {
+        _uiState.value = _uiState.value.copy(numerosAtivados = value)
     }
 
     fun mudaDuracaoCor(value: String) {

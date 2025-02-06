@@ -3,7 +3,6 @@ package br.com.jogosecm.flashmind.telas
 import android.app.Activity
 import android.content.Context
 import android.view.WindowManager
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,14 +23,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import br.com.jogosecm.flashmind.AppViewModel
-import br.com.jogosecm.flashmind.R
+import br.com.jogosecm.flashmind.Caractere
+import br.com.jogosecm.flashmind.Cor
+import br.com.jogosecm.flashmind.ObjetoMostravel
 import kotlinx.coroutines.delay
 
 
@@ -67,29 +68,62 @@ fun TelaJogo(
 ) {
     val appUiState by viewModelAtual.uiState.collectAsState()
 
-    val setDeMaos = remember(appUiState.maoDireitaAtivada, appUiState.maoEsquerdaAtivada) {
-        mutableSetOf<Int>().apply {
-            if (appUiState.maoDireitaAtivada) {
+    val setDeLetras = setOf(
+        Caractere("A"),
+        Caractere("E"),
+        Caractere("I"),
+        Caractere("O"),
+        Caractere("U"),
+        Caractere("M"),
+        Caractere("P"),
+        Caractere("R"),
+        Caractere("S"),
+        Caractere("V"),
+        Caractere("B"),
+        Caractere("C"),
+        Caractere("N"),
+        Caractere("D"),
+    )
+
+    val setDeCores = setOf(
+        Cor(cor = Color(red = 0, green = 252, blue = 4, alpha = 255)),
+        Cor(cor = Color(red = 255, green = 11, blue = 11, alpha = 255)),
+        Cor(cor = Color(red = 255, green = 243, blue = 0, alpha = 255)),
+        Cor(cor = Color(red = 22, green = 162, blue = 255, alpha = 255))
+    )
+
+    val setDeNumeros = setOf(
+        Caractere("1"),
+        Caractere("2"),
+        Caractere("3"),
+        Caractere("4"),
+        Caractere("5"),
+        Caractere("6"),
+        Caractere("7"),
+        Caractere("8"),
+        Caractere("9")
+    )
+
+    val setDeCoisas = remember(appUiState.letraAtivada, appUiState.coresAtivada, appUiState.numerosAtivados) {
+        mutableSetOf<Set<ObjetoMostravel>>().apply {
+            if (appUiState.letraAtivada) {
                 addAll(
                     setOf(
-                        R.drawable._d,
-                        R.drawable.d,
-                        R.drawable.dd,
-                        R.drawable.ddd,
-                        R.drawable.dddd,
-                        R.drawable.ddddd
+                        setDeLetras
                     )
                 )
             }
-            if (appUiState.maoEsquerdaAtivada) {
+            if (appUiState.numerosAtivados) {
                 addAll(
                     setOf(
-                        R.drawable._e,
-                        R.drawable.e,
-                        R.drawable.ee,
-                        R.drawable.eee,
-                        R.drawable.eeee,
-                        R.drawable.eeeee,
+                        setDeNumeros
+                    )
+                )
+            }
+            if (appUiState.coresAtivada) {
+                addAll(
+                    setOf(
+                       setDeCores
                     )
                 )
             }
@@ -97,8 +131,8 @@ fun TelaJogo(
     }
 
 
-    var ultimaImagem = remember { R.drawable._d }
-    var mao by remember { mutableStateOf(R.drawable._d) }
+    var ultimoMostrado: ObjetoMostravel = remember { Caractere("A") }
+    var sorteado: ObjetoMostravel by remember { mutableStateOf(Cor(Color.White)) }
 
     DisposableEffect(Unit) {
         val activity = contexto as? Activity
@@ -129,9 +163,9 @@ fun TelaJogo(
                         delay(350)
                     }
                     do {
-                        mao = setDeMaos.random()
-                    } while (mao == ultimaImagem)
-                    ultimaImagem = mao
+                        sorteado = setDeCoisas.random().random()
+                    } while (sorteado == ultimoMostrado)
+                    ultimoMostrado = sorteado
                     viewModelAtual.mudaMostraImagem(true)
                     delay(appUiState.duracaoImagem.toLong() * 1000L)
                     viewModelAtual.mudaMostraImagem(false)
@@ -171,14 +205,9 @@ fun TelaJogo(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-
-                          Image(
-                              painter = painterResource(mao),
-                              contentDescription = "mão",
-                              modifier = modifier.fillMaxSize(0.9F))
-
+                          sorteado.Mostrar()
                       }
-                    ultimaImagem = mao
+                    ultimoMostrado = sorteado
                 } else { //Se não mostrar imagem, mostra o cronômetro
                     if (appUiState.countdownValue == 0) {
                         Text(

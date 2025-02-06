@@ -53,6 +53,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import br.com.jogosecm.flashmind.AppViewModel
+import br.com.jogosecm.flashmind.BotaoCheck
 import br.com.jogosecm.flashmind.R
 import br.com.jogosecm.flashmind.TelaDoApp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -211,35 +212,68 @@ fun TelaInicio(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Checkbox(
-                                checked = appUiState.maoDireitaAtivada,
+                                checked = appUiState.letraAtivada,
                                 onCheckedChange = {
-                                    viewModelAtual.mudaMaoDireita(it)
-                                    if (it == false && appUiState.maoEsquerdaAtivada == false) {
-                                        viewModelAtual.mudaMaoEsquerda(true)
+                                    viewModelAtual.mudaLetraAtivada(it)
+                                    if (it == false && appUiState.numerosAtivados == false && appUiState.coresAtivada==false) {
+                                        viewModelAtual.mudaBotao(false)
+                                    } else {
+                                        viewModelAtual.mudaBotao(true)
                                     }
                                 },
                                 modifier = modifier
                             )
                             Spacer(modifier = modifier.width(10.dp))
-                            Text(text = "Mão direita")
+                            Text(text = "Letras")
                         }
                         Row(
                             modifier = modifier,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Checkbox(
-                                checked = appUiState.maoEsquerdaAtivada,
+                                checked = appUiState.coresAtivada,
                                 onCheckedChange = {
-                                    viewModelAtual.mudaMaoEsquerda(it)
-                                    if (it == false && appUiState.maoDireitaAtivada == false) {
-                                        viewModelAtual.mudaMaoDireita(true)
-                                    }
+                                    viewModelAtual.mudaCorAtivada(it)
+                                    if (appUiState.letraAtivada == false && appUiState.numerosAtivados == false && it==false) {
+                                        viewModelAtual.mudaBotao(false)}
+                                    else {
+                                            viewModelAtual.mudaBotao(true)
+                                        }
+
                                 },
                                 modifier = modifier
                             )
                             Spacer(modifier = modifier.width(10.dp))
-                            Text(text = "Mão esquerda")
+                            Text(text = "Cores")
                         }
+                      Row(
+                            modifier = modifier,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = appUiState.numerosAtivados,
+                                onCheckedChange = {
+                                    viewModelAtual.mudaNumeroAtivado(it)
+                                    if (appUiState.letraAtivada == false && it == false && appUiState.coresAtivada==false) {
+                                        viewModelAtual.mudaBotao(false)
+                                    }else {
+                                        viewModelAtual.mudaBotao(true)
+                                    }
+
+                                },
+                                modifier = modifier
+                            )
+                            Spacer(modifier = modifier.width(10.dp))
+                            Text(text = "Números")
+                        }
+                        /*BotaoCheck(modifier = modifier, checked = appUiState.numerosAtivados, onCheckedChange = {
+                            {
+                                viewModelAtual.mudaNumeroAtivado(it)
+                                if (appUiState.letraAtivada == false && appUiState.numerosAtivados == false && appUiState.coresAtivada==false) {
+                                    viewModelAtual.mudaBotao(false)
+                                }
+                            }
+                        })*/
                     }
                     Button(
                         modifier = modifier.padding(20.dp),
@@ -331,20 +365,21 @@ fun TelaInicio(
                                             "Mestre em Saúde e Tecnologia no Espaço Hospitalar – Pós-graduação em Neuropsicologia Reab Cognitva e Pós-graduação em Telessaúde\n"
                                 )
                                 Text(
-                                    "\uD83C\uDFA8 NeuroReflex \uD83C\uDFAE\n" +
+                                            "\uD83C\uDFA8 Flash Mind \uD83C\uDFAE\n" +
                                             "\n" +
                                             "Como Jogar:\n" +
-                                            "Fique sempre atento às mãos que surgem na tela! Você pode escolher se quer trabalhar a mão direita, a esquerda, ou, para um desafio ainda maior, ambas as mãos. A cada contagem regressiva (configurável de 5 a 1), o comando \"VAI\" aparece, acompanhado de uma mão mostrando um número com os dedos. O objetivo é reproduzir, com sua própria mão, a mesma quantidade de dedos, e identificar qual delas – direita ou esquerda – será a sua referência.\n" +
+                                            "Fique sempre atento às informações na tela. Neste jogo, há 3 tipos de estímulos diferentes: cores, números e letras.\n" +
+                                            "\n" +
+                                            "A cada contagem regressiva (configurável de 5 a 1), o comando \"VAI\" aparece, acompanhado de um estímulo. O objetivo é tocar na cor, número ou letra que aparecer.\n" +
+                                            "\n" +
+                                            "O terapeuta pode escolher entre os 4 tipos de estímulos: aparecer somente cores, números, letras ou todas as três opções juntas.\n" +
+                                            "\n" +
                                             "Cada ação concluída traz um novo estímulo, e você deve repetir o processo até alcançar o final do jogo.\n" +
                                             "\n" +
-                                            "Objetivos do Jogo: \n\uD83E\uDDE0 Atenção e Controle Inibitório: Desenvolva sua capacidade de concentração e autocontrole em situações de alta demanda.\n" +
-                                            "⚡\uFE0F Agilidade e Tempo de Resposta: Aperfeiçoe sua rapidez e precisão com cada novo desafio.\n" +
-                                            "\uD83D\uDD04 Flexibilidade Cognitiva: Estimule sua capacidade de adaptação e resposta a diferentes estímulos.\n" +
-                                            "✋ Motricidade Fina: Melhore o controle e a destreza dos movimentos das mãos.\n" +
-                                            "↔\uFE0F Lateralidade: Fortaleça o reconhecimento e a coordenação entre as mãos esquerda e direita.\n" +
-                                            "\uD83D\uDD22 Valores Numéricos: Desenvolva a percepção de números de forma interativa e desafiadora.\n" +
+                                            "Objetivos do Jogo:\n" +
                                             "\n" +
-                                            "Prepare-se para um jogo envolvente e dinâmico que vai desafiar sua mente e corpo! \uD83D\uDE80"
+                                            "\uD83E\uDDE0 Percepção visual, Agilidade, Tempo de resposta, Atenção, Flexibilidade cognitiva, Observação\n" +
+                                            "Controle inibitório \uD83D\uDE80"
                                 )
                                 Image(
                                     painter = painterResource(R.drawable.capa),
