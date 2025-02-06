@@ -53,7 +53,6 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.navigation.NavHostController
 import br.com.jogosecm.flashmind.AppViewModel
-import br.com.jogosecm.flashmind.BotaoCheck
 import br.com.jogosecm.flashmind.R
 import br.com.jogosecm.flashmind.TelaDoApp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
